@@ -48,6 +48,8 @@ class CameraViewModel: NSObject, ObservableObject {
     
     @Published var lastPhoto: UIImage?
     
+    @Published var formatsTest: [OSType] = []
+    
     private var cancellables = Set<AnyCancellable>()
     private var countdownTimer: AnyCancellable?
 
@@ -339,7 +341,7 @@ class CameraViewModel: NSObject, ObservableObject {
     
     private func getRawFormats() {
         let formats = cameraService.output.availableRawPhotoPixelFormatTypes
-        
+
         formats.forEach {
             let name = AVCapturePhotoOutput.isAppleProRAWPixelFormat($0) ? "RAW+" : "RAW"
             rawTypes[name] = $0

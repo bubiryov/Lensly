@@ -36,7 +36,7 @@ struct PermissionsView: View {
                 accentButton(
                     title: "Access to library",
                     isGranted: viewModel.libraryRequestIsGranted) {
-                        viewModel.permissionManager.requestLibraryRequest()
+                        viewModel.permissionManager.requestLibraryAccess()
                     }
             }
             .padding(.horizontal)

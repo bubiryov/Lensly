@@ -27,7 +27,7 @@ class FocalLengthManager: FocalLengthManagerProtocol {
             
             let relativeFocalLength = focalLength / mainCameraFocalLength
             
-            relativeFocalLengths[$0] = relativeFocalLength.rounded()
+            relativeFocalLengths[$0] = relativeFocalLength < 1 ? relativeFocalLength : relativeFocalLength.rounded()
         }
         
         return relativeFocalLengths

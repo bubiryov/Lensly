@@ -14,7 +14,7 @@ protocol PermissionsManagerProtocol: AnyObject {
     func checkCameraPermissions()
     func checkLibraryPermissions()
     func requestCameraAccess()
-    func requestLibraryRequest()
+    func requestLibraryAccess()
 }
 
 class PermissionsManager: PermissionsManagerProtocol {
@@ -37,8 +37,8 @@ class PermissionsManager: PermissionsManagerProtocol {
         }
     }
     
-    func requestLibraryRequest() {
-        PHPhotoLibrary.requestAuthorization(for: .addOnly) { [weak self] in
+    func requestLibraryAccess() {
+        PHPhotoLibrary.requestAuthorization(for: .readWrite) { [weak self] in
             if $0 == .authorized {
                 self?.delegate?.photoLibraryAccessGranted()
             }
