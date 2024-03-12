@@ -14,9 +14,10 @@ struct CameraView: View {
     @State private var focusPosition: CGPoint?
     @State private var showFocusFrame: Bool = false
     @State private var selectedCameraOption: CameraOption = .exposureValue
-    
     @State private var showFocusFrameTask: DispatchWorkItem?
-            
+    @State private var gridIsActivated: Bool = false
+    @State private var showSettings: Bool = false
+                
     var body: some View {
         mainContent()
     }
@@ -26,28 +27,32 @@ struct CameraView: View {
     CameraView()
 }
 
-
-
 // MARK: - Main content
 
 extension CameraView {
     func mainContent() -> some View {
-        VStack {
-            cameraViewSection()
-            bottomControlSection()
+        ZStack {
+            VStack {
+                cameraViewSection()
+                bottomControlSection()
+            }
+            settingsInvisibleLayer()
+            settingsWindow()
         }
         .frame(maxHeight: .infinity, alignment: .top)
-        .background(Color.black.opacity(1))
+        .background(.black)
+        .animation(.spring(response: 0.4, dampingFraction: 0.7), value: showSettings)
     }
 }
 
 // MARK: - Camera section
 
 extension CameraView {
+        
     func cameraViewSection() -> some View {
         ZStack {
-//            image()
             cameraView()
+            gridLayer()
             focusFrame()
             cameraOverlayElements()
         }
@@ -58,14 +63,34 @@ extension CameraView {
     }
     
     func cameraView() -> some View {
-        PhotoCaptureView(
-            cameraService: viewModel.cameraService) {
-                handlePhotoCapturing(result: $0)
+        
+        let cameraPositionIsFront: Bool = viewModel.selectedCamera?.position == .front
+        
+        let captureView: some View = {
+            PhotoCaptureView(
+                cameraService: viewModel.cameraService) {
+                    handlePhotoCapturing(result: $0)
+                }
+                .highPriorityGesture(
+                    DragGesture(minimumDistance: 0)
+                        .onEnded { updateFocusPoint(point: $0.location) }
+                )
+        }()
+        
+        let cameraView: some View = {
+            ZStack {
+                if cameraPositionIsFront {
+                    captureView
+                        .scaleEffect(x: -1, y: 1)
+                } else {
+                    captureView
+                }
             }
-            .highPriorityGesture(
-                DragGesture(minimumDistance: 0)
-                    .onEnded { updateFocusPoint(point: $0.location) }
-            )
+            .rotation3DEffect(Angle(degrees: cameraPositionIsFront ? 180 : 0), axis: (x: 0.0, y: 1.0, z: 0.0))
+        }()
+        
+        return cameraView
+
     }
     
     @ViewBuilder
@@ -84,16 +109,13 @@ extension CameraView {
         VStack(spacing: 0) {
             cameraLensSelectionBar()
                 .padding(.bottom, 10)
-            
-//            cameraLenses2()
-//                .padding(.bottom, 10)
 
             cameraOverlaySlider()
         }
         .frame(maxHeight: .infinity, alignment: .bottom)
         .animation(.none, value: viewModel.selectedCamera)
-
     }
+    
 }
 
 // MARK: - Camera section subcomponents
@@ -113,6 +135,7 @@ extension CameraView {
                     
                     Button {
                         if lens.key != viewModel.selectedCamera {
+                            HapticService.shared.play(.light)
                             viewModel.switchCamera(lens: lens.key)
                         }
                     } label: {
@@ -152,6 +175,35 @@ extension CameraView {
             .padding(.vertical, 4)
             .scaleEffect(lensSelected ? 1 : 0.8)
     }
+    
+    @ViewBuilder
+    func gridLayer() -> some View {
+        if gridIsActivated {
+            ZStack {
+                VStack(spacing: 0) {
+                    Spacer()
+                    Rectangle()
+                        .frame(maxWidth: .infinity, maxHeight: 1)
+                    Spacer()
+                    Rectangle()
+                        .frame(maxWidth: .infinity)
+                        .frame(maxWidth: .infinity, maxHeight: 1)
+                    Spacer()
+                }
+                
+                HStack(spacing: 0) {
+                    Spacer()
+                    Rectangle()
+                        .frame(maxWidth: 1, maxHeight: .infinity)
+                    Spacer()
+                    Rectangle()
+                        .frame(maxWidth: 1, maxHeight: .infinity)
+                    Spacer()
+                }
+            }
+            .foregroundColor(.white.opacity(0.5))
+        }
+    }
 }
 
 // MARK: - Bottom control section
@@ -177,7 +229,7 @@ extension CameraView {
             manualControlSlider()
                 .tint(.accentYellow)
                 .padding(.vertical, 10)
-                .padding(.bottom, 10)
+                .padding(.bottom)
         }
     }
     
@@ -203,7 +255,7 @@ extension CameraView {
             captureButton()
             restoreDefaultSettingsButton()
             universalButton(image: "settings") {
-                
+                showSettings.toggle()
             }
             .frame(width: 30)
         }
@@ -220,21 +272,20 @@ extension CameraView {
         
         if let lastPhoto = viewModel.lastPhoto {
             Button {
-                
+                openPhotoLibrary()
             } label: {
                 Image(uiImage: lastPhoto)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 35, height: 35)
+                    .frame(width: 30, height: 30)
                     .clipped()
                     .cornerRadius(5)
                     .shouldBeRotatable()
             }
         } else {
             universalButton(image: "photo") {
-                switchCameraPosition()
+                openPhotoLibrary()
             }
-            .shouldBeRotatable()
             .frame(width: 30)
         }
     }
@@ -247,18 +298,44 @@ extension CameraView {
         .frame(width: 30)
     }
     
+    @ViewBuilder
     func captureButton() -> some View {
-        Button(action: {
-            viewModel.capturePhoto()
-        }, label: {
-            Image(systemName: "circle")
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(height: 60)
-                .foregroundColor(.white)
-        })
+        Button {
+            viewModel.startCaptureProcess()
+        } label: {
+            captureButtonView()
+        }
+        .disabled(disabledCaptureButton())
     }
     
+    func captureButtonView() -> some View {
+        
+        let toValue = determineTimerScale()
+        
+        return ZStack {
+            if viewModel.currentTimerValue == nil {
+                Circle()
+                    .foregroundColor(.white)
+                    .padding(5)
+            } else {
+                timerCountLayer()
+            }
+            
+            Circle()
+                .stroke(lineWidth: 5)
+                .foregroundColor(.white.opacity(0.15))
+            
+            Circle()
+                .trim(from: 0.0, to: toValue)
+                .stroke(style: StrokeStyle(lineWidth: 5, lineCap: .round, lineJoin: .round))
+                .foregroundColor(.white)
+                .rotationEffect (Angle(degrees: 270))
+        }
+        .frame(width: 60, height: 60)
+        .contentShape(Circle())
+        .animation(.easeInOut(duration: 0.2), value: viewModel.currentTimerValue)
+    }
+
     func restoreDefaultSettingsButton() -> some View {
         let isAutoOn: Bool = {
             return viewModel.automaticExposure && viewModel.automaticISOandShutterSpeed && viewModel.automaticFocus && viewModel.automaticWhiteBalance
@@ -270,6 +347,134 @@ extension CameraView {
                 viewModel.turnOnAutoMode()
             }
             .frame(width: 30)
+    }
+    
+    @ViewBuilder
+    func timerCountLayer() -> some View {
+        if let timerValue = viewModel.currentTimerValue {
+            Text("\(Int(timerValue))")
+                .foregroundColor(.white)
+                .font(.nunito(.extraBold, size: 20))
+                .shouldBeRotatable()
+        }
+    }
+
+}
+
+// MARK: - Settings window
+
+extension CameraView {
+    
+    @ViewBuilder
+    func settingsWindow() -> some View {
+        
+        if showSettings {
+            SettingsWindow() {
+                formatRow()
+                timerRow()
+                gridRow()
+                flashlightRow()
+            }
+            .padding(.horizontal, 25)
+            .transition(.move(edge: .top))
+            .zIndex(1)
+            .frame(maxHeight: .infinity, alignment: .top)
+            .padding(.top, 120)
+        }
+    }
+    
+    @ViewBuilder
+    func formatRow() -> some View {
+        
+        let formats: [String] = {
+            let rawFormats = Array(viewModel.rawTypes.keys).sorted(by: { $0 < $1 })
+            return ["HEIF", "JPEG"] + rawFormats
+        }()
+        
+        SettingsRow(title: "Format") {
+            
+            ForEach(formats, id: \.self) { format in
+                
+                let existingFormat = PhotoFormat.allCases.first(where: { $0.rawValue == format })
+                
+                SettingRowButton(
+                    labelContent: .text(format),
+                    isSelected: viewModel.selectedFormat.rawValue == format) {
+                        if let existingFormat {
+                            viewModel.selectedFormat = existingFormat
+                        }
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    func timerRow() -> some View {
+        
+        let timerOptions: [Int] = [3, 5, 10]
+        
+        SettingsRow(title: "Timer") {
+            
+            SettingRowButton(
+                labelContent: .text("Off"),
+                isSelected: viewModel.selectedTimerValue == nil) {
+                    viewModel.selectedTimerValue = nil
+            }
+
+            ForEach(timerOptions, id: \.self) { option in
+                SettingRowButton(
+                    labelContent: .text(String(option) + "s"),
+                    isSelected: viewModel.selectedTimerValue == option) {
+                        viewModel.selectedTimerValue = option
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    func gridRow() -> some View {
+        
+        let gridOptions: [String] = ["On", "Off"]
+        
+        SettingsRow(title: "Grid") {
+            ForEach(gridOptions, id: \.self) { option in
+                SettingRowButton(
+                    labelContent: .text(option),
+                    isSelected: gridIsActivated == (option == "On")) {
+                        gridIsActivated = option == "On" ? true : false
+                }
+            }
+
+        }
+    }
+    
+    @ViewBuilder
+    func flashlightRow() -> some View {
+        if viewModel.selectedCamera?.hasFlash == true {
+            SettingsRow(title: "Flashlight") {
+                ForEach(FlashlightMode.allCases, id: \.rawValue) { mode in
+                    if viewModel.selectedCamera?.hasTorch == true || mode != .torch {
+                        SettingRowButton(
+                            labelContent: .text(mode.rawValue),
+                            isSelected: viewModel.selectedFlashlightMode == mode) {
+                                viewModel.selectedFlashlightMode = mode
+                            }
+                    }
+
+                }
+            }
+        }
+    }
+    
+    @ViewBuilder
+    func settingsInvisibleLayer() -> some View {
+        if showSettings {
+            Color.black.opacity(0.0001)
+                .ignoresSafeArea()
+                .onTapGesture {
+                    showSettings = false
+                }
+        }
     }
 }
 
@@ -427,70 +632,41 @@ extension CameraView {
     
     func switchCameraPosition() {
         let frontCamera = viewModel.lenses.first(where: { $0.key.deviceType == .builtInWideAngleCamera && $0.key.position == .front })
+        
         let backCamera = viewModel.lenses.first(where: { $0.key.deviceType == .builtInWideAngleCamera && $0.key.position == .back })
+        
         if let lens = viewModel.selectedCamera?.position == .back ? frontCamera : backCamera {
             withAnimation {
+                selectedCameraOption = .exposureValue
                 viewModel.switchCamera(lens: lens.key)
             }
         }
     }
-}
-
-// MARK: Testing elements
-extension View {
-    @inlinable
-    public func reverseMask<Mask: View>(
-        alignment: Alignment = .center,
-        @ViewBuilder _ mask: () -> Mask
-    ) -> some View {
-        self.mask {
-            Rectangle()
-                .overlay(alignment: alignment) {
-                    mask()
-                        .blendMode(.destinationOut)
-                }
+    
+    func disabledCaptureButton() -> Bool {
+        if let selectedValue = viewModel.selectedTimerValue,
+           let currentTimerValue = viewModel.currentTimerValue,
+           Int(currentTimerValue) <= selectedValue {
+            return true
         }
+        return false
     }
-}
-
-extension CameraView {
-            
-    func cameraLenses2() -> some View {
-        
-        return HStack(spacing: 10) {
-            ForEach(0..<3, id: \.self) { lens in
-                Button {
-                    
-                } label: {
-                    Text("\(lens)x")
-                        .foregroundColor(.accentYellow)
-                        .font(.nunito(.bold, size: 13))
-                        .frame(width: 30, height: 30)
-                        .contentShape(Circle())
-                        .background(.black.opacity(0.4))
-                        .clipShape(Circle())
-                        .padding(.vertical, 4)
-                }
-            }
+    
+    func determineTimerScale() -> CGFloat {
+        guard
+            let selected = viewModel.selectedTimerValue,
+            let current = viewModel.currentTimerValue else {
+            return 1
         }
-        .padding(.horizontal, 7)
-        .background(.black.opacity(0.2))
-        .cornerRadius(20)
-    }
         
-    func image() -> some View {
-        Image(.picture)
-            .resizable()
-            .aspectRatio(contentMode: .fill)
-            .frame(
-                width: UIScreen.main.bounds.width,
-                height: UIScreen.main.bounds.width * 4 / 3
-            )
-            .highPriorityGesture(
-                DragGesture(minimumDistance: 0)
-                    .onEnded {
-                        updateFocusPoint(point: $0.location)
-                    }
-            )
+        let step = 1 / Double(selected)
+        
+        return step * current
+    }
+    
+    func openPhotoLibrary() {
+        if let url = URL(string: "photos-redirect://") {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
     }
 }

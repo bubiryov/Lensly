@@ -14,13 +14,18 @@ class CameraViewModel: NSObject, ObservableObject {
     
     let cameraService = CameraService()
     private let photoLibraryService = PhotoLibraryService()
-    private let focalLengthManager = FocalLengthManager()
+    private let focalLengthManager: FocalLengthManagerProtocol = FocalLengthManager()
     private let imageCompressor = ImageCompressor()
+    private let hapticService: HapticService = .shared
     
     @Published var selectedCamera: AVCaptureDevice?
     
     @Published var rawTypes: [String : OSType] = [:]
-    @Published var selectedRawType: OSType?
+    
+    @Published var selectedFormat: PhotoFormat = .heif
+    @Published var selectedFlashlightMode: FlashlightMode = .off
+    @Published var selectedTimerValue: Int?
+    @Published var currentTimerValue: Double?
     
     @Published var lenses: [AVCaptureDevice : Float] = [:]
     
@@ -44,6 +49,7 @@ class CameraViewModel: NSObject, ObservableObject {
     @Published var lastPhoto: UIImage?
     
     private var cancellables = Set<AnyCancellable>()
+    private var countdownTimer: AnyCancellable?
 
     override init() {
         super.init()
@@ -72,6 +78,7 @@ class CameraViewModel: NSObject, ObservableObject {
         handleISOandShutterSpeedChanging()
         handleFocusChanging()
         handleWhiteBalanceChanging()
+        handleFlashlightModeChanging()
     }
     
 // MARK: - Selected camera settings
@@ -243,21 +250,82 @@ class CameraViewModel: NSObject, ObservableObject {
     
 // MARK: - Photo capturing
     
-    func capturePhoto() {
+    func startCaptureProcess() {
+        hapticService.play(.light)
+
+        guard let selectedTimerValue, selectedTimerValue > 0 else {
+            capturePhoto()
+            return
+        }
+        
+        currentTimerValue = Double(selectedTimerValue)
+        
+        countdownTimer = Timer.publish(every: 1, on: .main, in: .default)
+            .autoconnect()
+            .scan(selectedTimerValue) { count, _ in
+                return count >= 0 ? count - 1 : 0
+            }
+            .sink { [weak self] in
+                self?.currentTimerValue = Double($0)
+                self?.hapticService.play(.light)
+                
+                if $0 < 0 {
+                    self?.capturePhoto()
+                    self?.countdownTimer = nil
+                    self?.currentTimerValue = nil
+                }
+            }
+    }
+    
+    private func capturePhoto() {
+        let settings = setupCaptureSettings()
+        
+        if selectedFlashlightMode == .torch {
+            selectedFlashlightMode = .on
+        }
+        
+        cameraService.capturePhoto(with: settings, isMirrored: selectedCamera?.position == .front)
+        
+    }
+    
+    private func setupCaptureSettings() -> AVCapturePhotoSettings {
         let settings: AVCapturePhotoSettings = {
-            if let selectedRawType {
-                return configurateRawFormat(rawFormat: selectedRawType)
+            if selectedFormat == .raw || selectedFormat == .proRaw {
+                return configurateRawFormat(rawFormat: rawTypes[selectedFormat.rawValue]!) ?? AVCapturePhotoSettings()
             } else {
                 return AVCapturePhotoSettings()
             }
         }()
-        cameraService.capturePhoto(with: settings, isMirrored: selectedCamera?.position == .front)
+        
+        settings.flashMode = {
+            switch selectedFlashlightMode {
+            case .auto: .auto
+            case .off: .off
+            default: .on
+            }
+        }()
+        
+        return settings
     }
     
     func handlePhotoSaving(photo: AVCapturePhoto) {
-        photoLibraryService.completeAndStoreCapturedPhoto(photo: photo) { [weak self] in
+        photoLibraryService.completeAndStoreCapturedPhoto(photo: photo, format: selectedFormat) { [weak self] in
             self?.getLastPhoto()
         }
+    }
+        
+// MARK: - Flashlight
+    
+    func handleFlashlightModeChanging() {
+        $selectedFlashlightMode
+            .sink { [weak self] in
+                switch $0 {
+                case .torch: self?.cameraService.toggleTorch(mode: .on)
+                case .auto: self?.cameraService.toggleTorch(mode: .auto)
+                default: self?.cameraService.toggleTorch(mode: .off)
+                }
+            }
+            .store(in: &cancellables)
     }
     
 // MARK: - Lenses
@@ -273,12 +341,12 @@ class CameraViewModel: NSObject, ObservableObject {
         let formats = cameraService.output.availableRawPhotoPixelFormatTypes
         
         formats.forEach {
-            let name = AVCapturePhotoOutput.isAppleProRAWPixelFormat($0) ? "Pro RAW" : "RAW"
+            let name = AVCapturePhotoOutput.isAppleProRAWPixelFormat($0) ? "RAW+" : "RAW"
             rawTypes[name] = $0
         }
     }
     
-    private func configurateRawFormat(rawFormat: OSType) -> AVCapturePhotoSettings {
+    private func configurateRawFormat(rawFormat: OSType) -> AVCapturePhotoSettings? {
         
         let query = AVCapturePhotoOutput.isAppleProRAWPixelFormat(rawFormat) ?
         { AVCapturePhotoOutput.isAppleProRAWPixelFormat($0) } :
@@ -286,7 +354,7 @@ class CameraViewModel: NSObject, ObservableObject {
         
         guard let rawFormat =
                 cameraService.output.availableRawPhotoPixelFormatTypes.first(where: query) else {
-            fatalError("No RAW format found.")
+            return nil
         }
         return AVCapturePhotoSettings(rawPixelFormatType: rawFormat)
     }

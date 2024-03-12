@@ -10,13 +10,23 @@ import SwiftUI
 struct HomeView: View {
     
     @StateObject var viewModel: HomeViewModel = .init(permissionManager: PermissionsManager())
+    @State private var showIntro: Bool = true
     
     var body: some View {
         ZStack {
             if viewModel.cameraRequestIsGranted, viewModel.libraryRequestIsGranted {
                 CameraView()
             } else {
-                permissionsScreen()
+                PermissionsView(viewModel: viewModel)
+            }
+            
+            if showIntro {
+                IntroView()
+            }
+        }
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                showIntro = false
             }
         }
     }
@@ -24,30 +34,4 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
-}
-
-extension HomeView {
-    func permissionsScreen() -> some View {
-        VStack {
-            VStack(spacing: 50) {
-                Button {
-                    viewModel.permissionManager.requestCameraAccess()
-                } label: {
-                    Text("Camera")
-                        .foregroundColor(viewModel.cameraRequestIsGranted ? .green : .white)
-                }
-                
-                Button {
-                    viewModel.permissionManager.requestLibraryRequest()
-                } label: {
-                    Text("Library")
-                        .foregroundColor(viewModel.libraryRequestIsGranted ? .green : .white)
-                }
-
-            }
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.black)
-        .ignoresSafeArea()
-    }
 }

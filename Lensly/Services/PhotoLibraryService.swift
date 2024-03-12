@@ -25,10 +25,10 @@ class PhotoLibraryService {
         }
     }
     
-    func completeAndStoreCapturedPhoto(photo: AVCapturePhoto, completion: @escaping () -> Void) {
+    func completeAndStoreCapturedPhoto(photo: AVCapturePhoto, format: PhotoFormat, completion: @escaping () -> Void) {
         guard let data = photo.fileDataRepresentation() else { return }
         do {
-            let format = photo.isRawPhoto ? "dng" : "heif"
+            let format = photo.isRawPhoto ? "DNG" : format.rawValue
             let fileURL = generateTemporaryFileURL(format: format)
             try data.write(to: fileURL)
             saveToLibrary(fileURL: fileURL) {

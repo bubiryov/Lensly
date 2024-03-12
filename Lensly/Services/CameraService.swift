@@ -239,4 +239,18 @@ class CameraService {
         default: connection.videoOrientation = .portrait
         }
     }
+    
+// MARK: - Torch
+    
+    func toggleTorch(mode: AVCaptureDevice.TorchMode) {
+        do {
+            if selectedCamera?.hasTorch == true {
+                try selectedCamera?.lockForConfiguration()
+                selectedCamera?.torchMode = mode
+                selectedCamera?.unlockForConfiguration()
+            }
+        } catch {
+            print("Error toggling torch: \(error.localizedDescription)")
+        }
+    }
 }

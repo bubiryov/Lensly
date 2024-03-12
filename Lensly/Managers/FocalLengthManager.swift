@@ -7,7 +7,11 @@
 
 import AVFoundation
 
-class FocalLengthManager {
+protocol FocalLengthManagerProtocol {
+    func getRelativeFocalLengths(lenses: [AVCaptureDevice]) -> [AVCaptureDevice: Float]
+}
+
+class FocalLengthManager: FocalLengthManagerProtocol {
     func getRelativeFocalLengths(lenses: [AVCaptureDevice]) -> [AVCaptureDevice : Float] {
         
         guard let mainCameraFocalLength = getMainCameraFocalLength() else {

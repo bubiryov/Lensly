@@ -25,8 +25,12 @@
 		894ED53B2B9715AE007E0308 /* Nunito-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 894ED52B2B9715AE007E0308 /* Nunito-ExtraBold.ttf */; };
 		894ED53D2B9736DC007E0308 /* CornerRadiusStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894ED53C2B9736DC007E0308 /* CornerRadiusStyle.swift */; };
 		894ED53F2B973DF3007E0308 /* ManualControlBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 894ED53E2B973DF3007E0308 /* ManualControlBar.swift */; };
+		8955BC332B9B9EDA00D3E17B /* PhotoFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8955BC322B9B9EDA00D3E17B /* PhotoFormat.swift */; };
 		8969AEF42B8F8E2700D8868D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8969AEF32B8F8E2700D8868D /* AppDelegate.swift */; };
 		896AF93A2B8A299D00D4D3CF /* CameraService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896AF9392B8A299D00D4D3CF /* CameraService.swift */; };
+		896CD61D2B9C67B4001C85BF /* SettingsWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CD61C2B9C67B4001C85BF /* SettingsWindow.swift */; };
+		896CD61F2B9C67CF001C85BF /* SettingsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CD61E2B9C67CF001C85BF /* SettingsRow.swift */; };
+		896CD6212B9C6811001C85BF /* SettingRowButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896CD6202B9C6811001C85BF /* SettingRowButton.swift */; };
 		8975373F2B87A2A3004FD086 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8975373E2B87A2A3004FD086 /* ContentView.swift */; };
 		897537412B87A2A5004FD086 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 897537402B87A2A5004FD086 /* Assets.xcassets */; };
 		897537442B87A2A5004FD086 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 897537432B87A2A5004FD086 /* Preview Assets.xcassets */; };
@@ -39,11 +43,20 @@
 		89A784162B90BD8A004CB8D0 /* DetectRotationModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A784152B90BD8A004CB8D0 /* DetectRotationModifier.swift */; };
 		89A784182B90BDAC004CB8D0 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A784172B90BDAC004CB8D0 /* Extensions.swift */; };
 		89A7841A2B90E65A004CB8D0 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A784192B90E65A004CB8D0 /* BlurView.swift */; };
+		89B583C02B9F065300B6D31C /* HapticService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B583BF2B9F065300B6D31C /* HapticService.swift */; };
+		89B583C22B9F2B5800B6D31C /* ocean-video.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 89B583C12B9F2B5800B6D31C /* ocean-video.mp4 */; };
+		89B583C42B9F2CE600B6D31C /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B583C32B9F2CE600B6D31C /* VideoPlayerView.swift */; };
+		89B583C62B9F378600B6D31C /* PermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89B583C52B9F378600B6D31C /* PermissionsView.swift */; };
 		89CD72AA2B99D51C00406001 /* PhotoLibraryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CD72A92B99D51C00406001 /* PhotoLibraryService.swift */; };
 		89CD72AD2B9A076400406001 /* CameraOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CD72AC2B9A076400406001 /* CameraOption.swift */; };
 		89CD72AF2B9A318C00406001 /* NutinoFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CD72AE2B9A318C00406001 /* NutinoFont.swift */; };
 		89CD72B12B9A508700406001 /* ImageCompressor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CD72B02B9A508700406001 /* ImageCompressor.swift */; };
 		89CD72B32B9A548A00406001 /* FocalLengthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89CD72B22B9A548A00406001 /* FocalLengthManager.swift */; };
+		89EAFCE02BA043F200DC5237 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 89EAFCDF2BA043F200DC5237 /* Lottie */; };
+		89EAFCE32BA0448600DC5237 /* IntroAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EAFCE22BA0448600DC5237 /* IntroAnimation.swift */; };
+		89EAFCE92BA04F2500DC5237 /* shutter-animation.json in Resources */ = {isa = PBXBuildFile; fileRef = 89EAFCE82BA04F2500DC5237 /* shutter-animation.json */; };
+		89EAFCEB2BA0501900DC5237 /* IntroView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EAFCEA2BA0501900DC5237 /* IntroView.swift */; };
+		89EAFCEF2BA09C6700DC5237 /* FlashlightMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89EAFCEE2BA09C6700DC5237 /* FlashlightMode.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -65,9 +78,13 @@
 		894ED52B2B9715AE007E0308 /* Nunito-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Nunito-ExtraBold.ttf"; sourceTree = "<group>"; };
 		894ED53C2B9736DC007E0308 /* CornerRadiusStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CornerRadiusStyle.swift; sourceTree = "<group>"; };
 		894ED53E2B973DF3007E0308 /* ManualControlBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManualControlBar.swift; sourceTree = "<group>"; };
+		8955BC322B9B9EDA00D3E17B /* PhotoFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoFormat.swift; sourceTree = "<group>"; };
 		8969AEF32B8F8E2700D8868D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		896AF9362B8A28A000D4D3CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		896AF9392B8A299D00D4D3CF /* CameraService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraService.swift; sourceTree = "<group>"; };
+		896CD61C2B9C67B4001C85BF /* SettingsWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsWindow.swift; sourceTree = "<group>"; };
+		896CD61E2B9C67CF001C85BF /* SettingsRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsRow.swift; sourceTree = "<group>"; };
+		896CD6202B9C6811001C85BF /* SettingRowButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingRowButton.swift; sourceTree = "<group>"; };
 		897537392B87A2A3004FD086 /* Lensly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Lensly.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8975373E2B87A2A3004FD086 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		897537402B87A2A5004FD086 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -81,11 +98,19 @@
 		89A784152B90BD8A004CB8D0 /* DetectRotationModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetectRotationModifier.swift; sourceTree = "<group>"; };
 		89A784172B90BDAC004CB8D0 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		89A784192B90E65A004CB8D0 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
+		89B583BF2B9F065300B6D31C /* HapticService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticService.swift; sourceTree = "<group>"; };
+		89B583C12B9F2B5800B6D31C /* ocean-video.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ocean-video.mp4"; sourceTree = "<group>"; };
+		89B583C32B9F2CE600B6D31C /* VideoPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
+		89B583C52B9F378600B6D31C /* PermissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionsView.swift; sourceTree = "<group>"; };
 		89CD72A92B99D51C00406001 /* PhotoLibraryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryService.swift; sourceTree = "<group>"; };
 		89CD72AC2B9A076400406001 /* CameraOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraOption.swift; sourceTree = "<group>"; };
 		89CD72AE2B9A318C00406001 /* NutinoFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NutinoFont.swift; sourceTree = "<group>"; };
 		89CD72B02B9A508700406001 /* ImageCompressor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCompressor.swift; sourceTree = "<group>"; };
 		89CD72B22B9A548A00406001 /* FocalLengthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocalLengthManager.swift; sourceTree = "<group>"; };
+		89EAFCE22BA0448600DC5237 /* IntroAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroAnimation.swift; sourceTree = "<group>"; };
+		89EAFCE82BA04F2500DC5237 /* shutter-animation.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "shutter-animation.json"; sourceTree = "<group>"; };
+		89EAFCEA2BA0501900DC5237 /* IntroView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntroView.swift; sourceTree = "<group>"; };
+		89EAFCEE2BA09C6700DC5237 /* FlashlightMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlashlightMode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +118,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89EAFCE02BA043F200DC5237 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -147,8 +173,19 @@
 				896AF9392B8A299D00D4D3CF /* CameraService.swift */,
 				89CD72A92B99D51C00406001 /* PhotoLibraryService.swift */,
 				89CD72B02B9A508700406001 /* ImageCompressor.swift */,
+				89B583BF2B9F065300B6D31C /* HapticService.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		896CD61B2B9C67A5001C85BF /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				896CD61C2B9C67B4001C85BF /* SettingsWindow.swift */,
+				896CD61E2B9C67CF001C85BF /* SettingsRow.swift */,
+				896CD6202B9C6811001C85BF /* SettingRowButton.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		897537302B87A2A3004FD086 = {
@@ -179,6 +216,8 @@
 				89A784072B90A582004CB8D0 /* Root */,
 				896AF9372B8A296F00D4D3CF /* Core */,
 				89A784142B90BD79004CB8D0 /* Tools */,
+				89EAFCE12BA0447100DC5237 /* Lottie */,
+				89B583C72B9F3BD500B6D31C /* Resources */,
 				897537402B87A2A5004FD086 /* Assets.xcassets */,
 				894ED51B2B9714C7007E0308 /* Fonts */,
 				897537422B87A2A5004FD086 /* Preview Content */,
@@ -199,6 +238,8 @@
 			children = (
 				89A7840A2B90A5A8004CB8D0 /* HomeViewModel.swift */,
 				89A784082B90A59C004CB8D0 /* HomeView.swift */,
+				89B583C52B9F378600B6D31C /* PermissionsView.swift */,
+				89EAFCEA2BA0501900DC5237 /* IntroView.swift */,
 			);
 			path = Root;
 			sourceTree = "<group>";
@@ -208,6 +249,8 @@
 			children = (
 				89A7840D2B90A692004CB8D0 /* PhotoCaptureView.swift */,
 				894ED53E2B973DF3007E0308 /* ManualControlBar.swift */,
+				89B583C32B9F2CE600B6D31C /* VideoPlayerView.swift */,
+				896CD61B2B9C67A5001C85BF /* Settings */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -232,12 +275,31 @@
 			path = Tools;
 			sourceTree = "<group>";
 		};
+		89B583C72B9F3BD500B6D31C /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				89EAFCE82BA04F2500DC5237 /* shutter-animation.json */,
+				89B583C12B9F2B5800B6D31C /* ocean-video.mp4 */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		89CD72AB2B9A075C00406001 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				89CD72AC2B9A076400406001 /* CameraOption.swift */,
+				8955BC322B9B9EDA00D3E17B /* PhotoFormat.swift */,
+				89EAFCEE2BA09C6700DC5237 /* FlashlightMode.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		89EAFCE12BA0447100DC5237 /* Lottie */ = {
+			isa = PBXGroup;
+			children = (
+				89EAFCE22BA0448600DC5237 /* IntroAnimation.swift */,
+			);
+			path = Lottie;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -256,6 +318,9 @@
 			dependencies = (
 			);
 			name = Lensly;
+			packageProductDependencies = (
+				89EAFCDF2BA043F200DC5237 /* Lottie */,
+			);
 			productName = Lensly;
 			productReference = 897537392B87A2A3004FD086 /* Lensly.app */;
 			productType = "com.apple.product-type.application";
@@ -284,6 +349,9 @@
 				Base,
 			);
 			mainGroup = 897537302B87A2A3004FD086;
+			packageReferences = (
+				89EAFCDE2BA043F100DC5237 /* XCRemoteSwiftPackageReference "lottie-spm" */,
+			);
 			productRefGroup = 8975373A2B87A2A3004FD086 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -298,6 +366,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				89B583C22B9F2B5800B6D31C /* ocean-video.mp4 in Resources */,
 				894ED5352B9715AE007E0308 /* Nunito-SemiBold.ttf in Resources */,
 				894ED5302B9715AE007E0308 /* Nunito-BlackItalic.ttf in Resources */,
 				894ED5362B9715AE007E0308 /* Nunito-Bold.ttf in Resources */,
@@ -315,6 +384,7 @@
 				894ED5382B9715AE007E0308 /* Nunito-Light.ttf in Resources */,
 				894ED52F2B9715AE007E0308 /* Nunito-LightItalic.ttf in Resources */,
 				894ED5332B9715AE007E0308 /* Nunito-MediumItalic.ttf in Resources */,
+				89EAFCE92BA04F2500DC5237 /* shutter-animation.json in Resources */,
 				894ED52D2B9715AE007E0308 /* Nunito-ExtraLight.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -329,20 +399,30 @@
 				8969AEF42B8F8E2700D8868D /* AppDelegate.swift in Sources */,
 				89A7840E2B90A692004CB8D0 /* PhotoCaptureView.swift in Sources */,
 				89A7840B2B90A5A8004CB8D0 /* HomeViewModel.swift in Sources */,
+				89EAFCEF2BA09C6700DC5237 /* FlashlightMode.swift in Sources */,
 				8975373F2B87A2A3004FD086 /* ContentView.swift in Sources */,
 				89A784052B90A544004CB8D0 /* PermissionsManager.swift in Sources */,
 				89A7841A2B90E65A004CB8D0 /* BlurView.swift in Sources */,
 				89CD72B12B9A508700406001 /* ImageCompressor.swift in Sources */,
 				89A784132B90BA41004CB8D0 /* CameraViewModel.swift in Sources */,
+				89B583C02B9F065300B6D31C /* HapticService.swift in Sources */,
 				894ED53F2B973DF3007E0308 /* ManualControlBar.swift in Sources */,
 				89CD72AF2B9A318C00406001 /* NutinoFont.swift in Sources */,
 				89A784092B90A59C004CB8D0 /* HomeView.swift in Sources */,
+				89EAFCE32BA0448600DC5237 /* IntroAnimation.swift in Sources */,
+				896CD6212B9C6811001C85BF /* SettingRowButton.swift in Sources */,
+				8955BC332B9B9EDA00D3E17B /* PhotoFormat.swift in Sources */,
 				89CD72AA2B99D51C00406001 /* PhotoLibraryService.swift in Sources */,
+				896CD61D2B9C67B4001C85BF /* SettingsWindow.swift in Sources */,
 				894ED53D2B9736DC007E0308 /* CornerRadiusStyle.swift in Sources */,
 				896AF93A2B8A299D00D4D3CF /* CameraService.swift in Sources */,
 				89A784112B90B9F2004CB8D0 /* CameraView.swift in Sources */,
+				89B583C42B9F2CE600B6D31C /* VideoPlayerView.swift in Sources */,
+				89EAFCEB2BA0501900DC5237 /* IntroView.swift in Sources */,
 				89CD72B32B9A548A00406001 /* FocalLengthManager.swift in Sources */,
 				89A784182B90BDAC004CB8D0 /* Extensions.swift in Sources */,
+				896CD61F2B9C67CF001C85BF /* SettingsRow.swift in Sources */,
+				89B583C62B9F378600B6D31C /* PermissionsView.swift in Sources */,
 				89A784162B90BD8A004CB8D0 /* DetectRotationModifier.swift in Sources */,
 				89CD72AD2B9A076400406001 /* CameraOption.swift in Sources */,
 			);
@@ -570,6 +650,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		89EAFCDE2BA043F100DC5237 /* XCRemoteSwiftPackageReference "lottie-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.4.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		89EAFCDF2BA043F200DC5237 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 89EAFCDE2BA043F100DC5237 /* XCRemoteSwiftPackageReference "lottie-spm" */;
+			productName = Lottie;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 897537312B87A2A3004FD086 /* Project object */;
 }
